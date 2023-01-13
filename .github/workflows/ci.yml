@@ -2,9 +2,9 @@ name: CI
 
 on: push
 
-on:
-  schedule:
-    - cron: '0 20 * * *'
+# on:
+#   schedule:
+#     - cron: '0 20 * * *'
     
 jobs:
   build:
