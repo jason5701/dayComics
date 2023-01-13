@@ -1,0 +1,25 @@
+name: CI
+
+on: push
+
+on:
+  schedule:
+    - cron: '0 20 * * *'
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.2
+          cache: npm
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install ci
+        run: npm ci
+
+      - name: Run test
+        run: npm run test
