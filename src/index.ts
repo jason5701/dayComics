@@ -18,7 +18,15 @@ const comics: string[] = [
   '호랑이형님',
   '무사만리행',
   '나노마신',
-  '북검전기'
+  '북검전기',
+  '시간이-머문-집',
+  '샤크',
+  '미래의-골동품-가게',
+  '화산귀환',
+  '초인의-시대',
+  '전지적-독자-시점',
+  '신의-탑',
+  '아비무쌍'
 ];
 
 const today = new Date(Date.now()).toISOString().substring(0, 10);
@@ -34,7 +42,7 @@ export class Scraper {
 
     $('#fboardlist > table > tbody > tr').map((i, element) => {
       const date = $(element).find('td:nth-child(3)').text();
-      if (date >= '2023-01-10') {
+      if (date >= today) {
         const title = $(element)
           .find('td:nth-child(2)')
           .text()
