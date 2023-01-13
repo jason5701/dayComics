@@ -2,6 +2,7 @@ import 'dotenv/config';
 import axios from 'axios';
 import { load } from 'cheerio';
 import { createIssue } from './issue/createIssue';
+import TelegramBot from 'node-telegram-bot-api';
 
 type Result = {
   date: string;
@@ -26,7 +27,7 @@ const comics: string[] = [
   '초인의-시대',
   '전지적-독자-시점',
   '신의-탑',
-  '아비무쌍'
+  '아비무쌍',
 ];
 
 const today = new Date(Date.now()).toISOString().substring(0, 10);
@@ -58,8 +59,23 @@ export class Scraper {
   }
 }
 
+export class Send {
+  async telegram(chat_id: string, message: string) {
+    const bot = new TelegramBot(process.env.TELEGRAM_TOKEN as string);
+
+    bot
+      .sendMessage(chat_id, message, {
+        parse_mode: 'Markdown',
+        disable_web_page_preview: true,
+      })
+      .catch((error) => console.error(error));
+    console.info('send msg telegram');
+  }
+}
+
 const main = async () => {
   const scraper = new Scraper();
+  const send = new Send();
 
   const result = comics.map(async (comic: string) => {
     const response = await scraper.scrapeManga(comic);
@@ -69,19 +85,23 @@ const main = async () => {
 
   let body: string = '';
   let isCheck: boolean = false;
+  let msg: string = '';
   for await (let item of result) {
     if (item.length > 0) {
       isCheck = true;
       item.forEach((i) => {
         body += `${i.title}, <a href='https://toonkor176.com/${i.url}'>바로가기</a><br/>\n`;
+        msg += `[${i.title}](https://toonkor176.com/${i.url})\n`;
       });
     }
   }
-  if (isCheck) await createIssue(`${today}`, body);
-  else {
+  if (isCheck) {
+    await createIssue(`${today}`, body);
+  } else {
     console.info('nothing today');
-    return;
+    msg = '새로운 웹툰이 없습니다';
   }
+  send.telegram(process.env.CHAT_ID as string, msg);
 };
 
 main();
