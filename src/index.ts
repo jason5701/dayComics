@@ -34,7 +34,7 @@ export class Scraper {
 
     $('#fboardlist > table > tbody > tr').map((i, element) => {
       const date = $(element).find('td:nth-child(3)').text();
-      if (date >= today) {
+      if (date >= '2023-01-10') {
         const title = $(element)
           .find('td:nth-child(2)')
           .text()

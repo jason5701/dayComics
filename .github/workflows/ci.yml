@@ -23,3 +23,7 @@ jobs:
 
       - name: Run test
         run: npm run test
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GIT_USER: ${{ secrets.GIT_USER }}
+          GIT_REPO: ${{ secrets.GIT_REPO }}
