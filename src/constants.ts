@@ -3,7 +3,7 @@ export const contants = {
   error_message: 'something went wrong',
 };
 
-export const baseUrl = 'https://toonkor177.com/'
+export const baseUrl = (num: number) => `https://toonkor${num}.com/`;
 
 export const comics: string[] = [
   '일렉시드',
