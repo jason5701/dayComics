@@ -67,7 +67,6 @@ export class Send {
         disable_web_page_preview: true,
       })
       .catch((error) => console.error(error));
-    console.info('send msg telegram');
   }
 }
 
@@ -95,8 +94,8 @@ const main = async () => {
       });
     }
   }
-  // console.log(body);
-  // console.log(msg);
+  console.log(body);
+  console.log(msg);
   if (isCheck) {
     await createIssue(`${today}`, body);
   } else {
