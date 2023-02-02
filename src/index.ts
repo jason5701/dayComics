@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import axios from 'axios';
 import { load } from 'cheerio';
-import { createIssue } from './issue/createIssue';
+// import { createIssue } from './issue/createIssue';
 import TelegramBot from 'node-telegram-bot-api';
 import { comics, baseUrl } from './constants';
 
@@ -94,10 +94,9 @@ const main = async () => {
       });
     }
   }
-  console.log(body);
-  console.log(msg);
+
   if (isCheck) {
-    await createIssue(`${today}`, body);
+    // await createIssue(`${today}`, body);
   } else {
     console.info('nothing today');
     msg = '새로운 웹툰이 없습니다';
