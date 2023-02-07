@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import axios from 'axios';
 import { load } from 'cheerio';
-// import { createIssue } from './issue/createIssue';
+import { getIssues } from './issue/api';
 import TelegramBot from 'node-telegram-bot-api';
-import { comics, baseUrl } from './constants';
+import { baseUrl } from './constants';
 
 type Result = {
   date: string;
@@ -74,7 +74,8 @@ const main = async () => {
   const scraper = new Scraper();
   const send = new Send();
 
-  const result = comics.map(async (comic: string) => {
+  const titles = await getIssues();
+  const result = titles?.map(async (comic: string) => {
     const response = await scraper.scrapeManga(comic);
 
     return [...response];
@@ -83,15 +84,17 @@ const main = async () => {
   let body: string = '';
   let isCheck: boolean = false;
   let msg: string = '';
-  for await (let item of result) {
-    if (item.length > 0) {
-      isCheck = true;
-      item.forEach((i) => {
-        body += `${i.title}, <a href='${baseUrl(i.num)}${
-          i.url
-        }'>바로가기</a><br/>\n`;
-        msg += `[${i.title}](${baseUrl(i.num)}${i.url})\n`;
-      });
+  if (result) {
+    for await (let item of result) {
+      if (item.length > 0) {
+        isCheck = true;
+        item.forEach((i) => {
+          body += `${i.title}, <a href='${baseUrl(i.num)}${
+            i.url
+          }'>바로가기</a><br/>\n`;
+          msg += `[${i.title}](${baseUrl(i.num)}${i.url})\n`;
+        });
+      }
     }
   }
 
